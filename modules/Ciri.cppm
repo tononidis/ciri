@@ -70,8 +70,14 @@ namespace detail
                     const auto& fieldValue = data_in.[:field:];
 
                     if constexpr (std::meta::is_pointer_type(std::meta::type_of(field)) == true) {
-                        assert(fieldValue != nullptr);
-                        res = Serialize<std::remove_pointer_t<MemberType>>::serialize(res, *fieldValue);
+                        if (fieldValue == nullptr) {
+                            res = Serialize<bool>::serialize(res, true);
+                        }
+
+                        else {
+                            res = Serialize<bool>::serialize(res, false);
+                            res = Serialize<std::remove_pointer_t<MemberType>>::serialize(res, *fieldValue);
+                        }
                     }
 
                     else {
@@ -103,8 +109,15 @@ namespace detail
                     auto& fieldValue = data_out.[:field:];
 
                     if constexpr (std::meta::is_pointer_type(std::meta::type_of(field)) == true) {
-                        assert(fieldValue != nullptr);
-                        res = Deserialize<std::remove_pointer_t<MemberType>>::deserialize(res, *fieldValue);
+                        bool isNullptr;
+                        res = Deserialize<bool>::deserialize(res, isNullptr);
+                        if (isNullptr == true) {
+                            fieldValue = nullptr;
+                        }
+
+                        else {
+                            res = Deserialize<std::remove_pointer_t<MemberType>>::deserialize(res, *fieldValue);
+                        }
                     }
 
                     else {

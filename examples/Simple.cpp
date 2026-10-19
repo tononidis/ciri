@@ -6,6 +6,7 @@ import Buffer;
 struct Test {
     int intData;
     int* pIntData;
+    int* pIntData2;
     std::vector<int> vecIntData;
     char charData;
     std::vector<std::string> vecStrData;
@@ -19,6 +20,7 @@ int main()
     seri.intData = 44;
     seri.charData = '4';
     seri.pIntData = new int(444);
+    seri.pIntData2 = nullptr;
     seri.vecIntData = { 4, 4, 4 };
     seri.vecStrData = { "paok-vec-4", "paok-vec-44" };
     std::snprintf(seri.charArrData, sizeof(seri.charArrData), "paok-charArr");
@@ -46,6 +48,7 @@ int main()
 
     std::cout << "deseri.intData: " << deseri.intData << std::endl;
     std::cout << "deseri.pIntData: " << *deseri.pIntData << std::endl;
+    std::cout << "deseri.pIntData2: " << deseri.pIntData2 << std::endl;
 
     for (const auto& item : deseri.vecIntData) {
         std::cout << "deseri.vecIntData: " << item << std::endl;
